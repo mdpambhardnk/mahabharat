@@ -325,4 +325,12 @@ public class Utility {
             }
         }
     }
+
+    public static boolean isAppInstalled(Activity activity, String packageName) {
+        if (activity.getPackageManager().getLaunchIntentForPackage(packageName) != null) {
+            return true;
+        }
+        return false;
+    }
+
 }
