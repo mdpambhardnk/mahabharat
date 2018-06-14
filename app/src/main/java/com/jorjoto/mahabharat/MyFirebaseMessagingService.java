@@ -44,99 +44,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         if (remoteMessage == null)
             return;
 
-
+        Log.v("AAAAAAAA", "getData().size() " + remoteMessage.getData().size());
         if (remoteMessage.getData().size() > 0) {
             Log.v("AAAAAA", "Message data payload: " + remoteMessage.getData());
             handleDataMessage(remoteMessage.getData());
-
-        } else if (remoteMessage.getNotification() != null) {
-            Log.v("AAAAAA", "Message Notification Body: " + remoteMessage.getNotification().getBody());
-            handleNotification(remoteMessage.getNotification());
         }
-
-//        if (remoteMessage.getData().size() > 0) {
-//            try {
-//                //   handleDataMessage(remoteMessage.getData());
-//                String image = remoteMessage.getData().get("image");
-//                String title = remoteMessage.getData().get("title");
-//                String message = remoteMessage.getData().get("message");
-//                String videoId = remoteMessage.getData().get("videoId");
-//                String redirectScreen = remoteMessage.getData().get("redirectScreen");
-//                String notificationID = remoteMessage.getData().get("notificationID");
-//                try {
-//                    jsonObject = new JSONObject();
-//                    if (image != null) {
-//                        jsonObject.put("image", image);
-//                    } else {
-//                        jsonObject.put("image", "");
-//                    }
-//                    if (title != null) {
-//                        jsonObject.put("title", title);
-//                    } else {
-//                        jsonObject.put("title", "");
-//                    }
-//                    if (message != null) {
-//                        jsonObject.put("message", message);
-//                    } else {
-//                        jsonObject.put("message", "");
-//                    }
-//                    if (videoId != null) {
-//                        jsonObject.put("videoId", videoId);
-//                    } else {
-//                        jsonObject.put("videoId", "");
-//                    }
-//                    if (redirectScreen != null) {
-//                        jsonObject.put("redirectScreen", redirectScreen);
-//                    } else {
-//                        jsonObject.put("redirectScreen", "");
-//                    }
-//                    if (notificationID != null) {
-//                        jsonObject.put("notificationID", notificationID);
-//                    } else {
-//                        jsonObject.put("notificationID", "");
-//                    }
-//                    Log.v("AAAAA", "" + jsonObject.toString());
-//                    generateNotification(getBaseContext(), jsonObject.toString());
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//            } catch (Exception e) {
-//                Log.v("AAAAAAA", "e=> " + e);
-//                e.printStackTrace();
-//            }
-//        }
     }
-
-    private void handleNotification(RemoteMessage.Notification RemoteMsgNotification) {
-        String message = RemoteMsgNotification.getBody();
-        String title = RemoteMsgNotification.getTitle();
-        String image = RemoteMsgNotification.getIcon();
-        try {
-            jsonObject = new JSONObject();
-            if (title != null) {
-                jsonObject.put("title", title);
-            } else {
-                jsonObject.put("title", "");
-            }
-            if (message != null) {
-                jsonObject.put("message", message);
-            } else {
-                jsonObject.put("message", "");
-            }
-            if (image != null) {
-                jsonObject.put("image", image);
-            } else {
-                jsonObject.put("image", "");
-            }
-            Log.v("AAAAA", "" + jsonObject.toString());
-            generateNotification(getBaseContext(), jsonObject.toString());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-
-
+    
     private void handleDataMessage(Map<String, String> intent) {
         String image = intent.get("image");
         String title = intent.get("title");

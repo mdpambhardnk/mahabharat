@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,7 +18,12 @@ import android.view.Display;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -33,6 +39,8 @@ import java.util.Calendar;
 public class SplashScreenActivity extends AppCompatActivity {
     public static RequestModel requestModel;
     public static SplashScreenActivity act;
+    MediaPlayer mySong;
+    private ImageView imageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +48,17 @@ public class SplashScreenActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash_screen);
         act = this;
 
+        try {
+            mySong = MediaPlayer.create(SplashScreenActivity.this, R.raw.audio);
+            mySong.start();
+            Animation anim = AnimationUtils.loadAnimation(this, R.anim.translate);
+            anim.reset();
+            imageView = (ImageView) findViewById(R.id.imageView2);
+            imageView.clearAnimation();
+            imageView.startAnimation(anim);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         try {
             if (getIntent().getExtras().getString("bundle") != null) {
                 Utility.setNotificationData(SplashScreenActivity.this, getIntent().getExtras().getString("bundle"));
@@ -49,6 +68,7 @@ public class SplashScreenActivity extends AppCompatActivity {
             e2.printStackTrace();
             Utility.setFromNotification(SplashScreenActivity.this, false);
         }
+
         if (Utility.checkInternetConnection(SplashScreenActivity.this)) {
             String currentDateTimeString = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
             if ((Utility.getTodayDate(SplashScreenActivity.this).equals(currentDateTimeString))) {
@@ -59,7 +79,7 @@ public class SplashScreenActivity extends AppCompatActivity {
                         startActivity(in);
                         finish();
                     }
-                }, 1500);
+                }, 5600);
             } else {
                 Utility.setTodayDate(SplashScreenActivity.this, currentDateTimeString);
                 if (Utility.getFCMRegId(SplashScreenActivity.this).trim().length() > 0) {

@@ -2,8 +2,10 @@ package com.jorjoto.mahabharat.async;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Handler;
 
 import com.jorjoto.mahabharat.activity.MainActivity;
+import com.jorjoto.mahabharat.activity.SplashScreenActivity;
 import com.jorjoto.mahabharat.activity.YouTubeVideoActivity;
 import com.jorjoto.mahabharat.model.RequestModel;
 import com.jorjoto.mahabharat.model.ResponseModel;
@@ -26,7 +28,6 @@ public class DeviceRegistorAsync {
     public DeviceRegistorAsync(final Activity activity, RequestModel requestModel) {
         this.activity = activity;
         this.requestModel = requestModel;
-
         try {
             jObject = new JSONObject();
             ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
@@ -57,9 +58,15 @@ public class DeviceRegistorAsync {
         try {
             if (responseModel.getStatus().equals(Global_App.STATUS_SUCCESS)) {
                 Utility.setIsDeviceRegistor(activity, "1");
-                Intent in = new Intent(activity, MainActivity.class);
-                activity.startActivity(in);
-                activity.finish();
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    public void run() {
+                        Intent in = new Intent(activity, MainActivity.class);
+                        activity.startActivity(in);
+                        activity.finish();
+                    }
+                }, 5000);
+
             } else if (responseModel.getStatus().equals(Global_App.STATUS_ERROR)) {
                 Utility.Notify(activity, Global_App.APPNAME, responseModel.getMessage());
             }
