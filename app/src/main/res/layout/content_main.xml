@@ -101,35 +101,17 @@
             app:arc_origin="bottom"
             app:arc_radius="@dimen/layout_radius_path">
 
-            <Button
+            <ImageView
+                android:id="@+id/imgShare"
                 style="@style/Item.Path"
-                android:text="A"
-                android:textColor="@color/path_orange"
-                app:arc_angle="30" />
-
-            <Button
-                style="@style/Item.Path"
-                android:text="B"
-                android:textColor="@color/path_blue"
+                android:src="@drawable/icon_share"
                 app:arc_angle="60" />
 
-            <Button
+            <ImageView
+                android:id="@+id/imgList"
                 style="@style/Item.Path"
-                android:text="C"
-                android:textColor="@color/path_black"
-                app:arc_angle="90" />
-
-            <Button
-                style="@style/Item.Path"
-                android:text="D"
-                android:textColor="@color/path_green"
+                android:src="@drawable/icon_video"
                 app:arc_angle="120" />
-
-            <Button
-                style="@style/Item.Path"
-                android:text="E"
-                android:textColor="@color/path_purple"
-                app:arc_angle="150" />
 
         </com.ogaclejapan.arclayout.ArcLayout>
     </FrameLayout>
@@ -142,7 +124,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="15dp"
         android:layout_marginRight="24dp"
-        android:padding="15dp"
         android:background="@drawable/icon_logo_feb"
+        android:padding="15dp"
         android:visibility="gone" />
 </RelativeLayout>

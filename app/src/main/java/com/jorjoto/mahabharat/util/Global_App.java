@@ -9,7 +9,7 @@ public class Global_App {
     public static String msgINTERNET = "We can not detect any internet connectivity.Please check your internet connection and try again.";
     public static String STATUS_ERROR = "0";
     public static String STATUS_SUCCESS = "1";
-
+    public static final String LABEL_LOADING = "Please Wait" ;
     public static String SCREEN_HOME = "1";
     public static String SCREEN_VIDEODETAILS = "1";
 

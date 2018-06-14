@@ -1,5 +1,6 @@
 package com.jorjoto.mahabharat.activity;
 
+import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
@@ -36,6 +37,7 @@ import com.jorjoto.mahabharat.model.RequestModel;
 import com.jorjoto.mahabharat.model.ResponseModel;
 import com.jorjoto.mahabharat.util.AnimatorUtils;
 import com.jorjoto.mahabharat.util.Global_App;
+import com.jorjoto.mahabharat.util.Utility;
 import com.ogaclejapan.arclayout.ArcLayout;
 
 import java.util.ArrayList;
@@ -62,7 +64,7 @@ public class YouTubeVideoActivity extends YouTubeBaseActivity implements YouTube
     public static String currentVideo = "";
     static ResponseModel responseModel;
     SuggestVideoListAdapter suggestVideoListAdapter;
-
+    public static final int REQUEST_WRITE_PERMISSION = 73;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -169,20 +171,16 @@ public class YouTubeVideoActivity extends YouTubeBaseActivity implements YouTube
             return;
         }
 
-        if (v instanceof Button) {
-            showToast((Button) v);
+        if (v instanceof ImageView) {
+            if (v.getId() == R.id.imgShare) {
+                share();
+                hideMenu();
+            } else if (v.getId() == R.id.imgList) {
+                onFabClick(v);
+                MainActivity.getVideoList(YouTubeVideoActivity.this, "1");
+                finish();
+            }
         }
-    }
-
-    private void showToast(Button btn) {
-        if (toast != null) {
-            toast.cancel();
-        }
-
-        String text = "Clicked: " + btn.getText();
-        toast = Toast.makeText(this, text, Toast.LENGTH_SHORT);
-        toast.show();
-
     }
 
 
@@ -273,6 +271,7 @@ public class YouTubeVideoActivity extends YouTubeBaseActivity implements YouTube
         }
         v.setSelected(!v.isSelected());
     }
+
     private void showMenu() {
         menuLayout.setVisibility(View.VISIBLE);
 
@@ -355,4 +354,24 @@ public class YouTubeVideoActivity extends YouTubeBaseActivity implements YouTube
         return anim;
     }
 
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (grantResults[0] == 0 && grantResults[1] == 0) {
+            Utility.shareImageData(YouTubeVideoActivity.this);
+        } else {
+            Utility.Notify(YouTubeVideoActivity.this, Global_App.APPNAME, "permission denied.");
+        }
+
+    }
+
+    public void share() {
+        if (Utility.getAppShareImage(YouTubeVideoActivity.this).trim().length() > 0) {
+            if (Build.VERSION.SDK_INT >= 23) {
+                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_WRITE_PERMISSION);
+            } else {
+                Utility.shareImageData(YouTubeVideoActivity.this);
+            }
+        } else {
+            Utility.shareImageData(YouTubeVideoActivity.this);
+        }
+    }
 }

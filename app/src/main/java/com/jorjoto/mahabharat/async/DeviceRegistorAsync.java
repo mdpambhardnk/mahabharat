@@ -3,6 +3,7 @@ package com.jorjoto.mahabharat.async;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Handler;
+import android.util.Log;
 
 import com.jorjoto.mahabharat.activity.MainActivity;
 import com.jorjoto.mahabharat.activity.SplashScreenActivity;
@@ -59,6 +60,7 @@ public class DeviceRegistorAsync {
             if (responseModel.getStatus().equals(Global_App.STATUS_SUCCESS)) {
 
                 if (responseModel.getAppShare().getShareImage() != null) {
+                    Log.v("AAAAA",""+responseModel.getAppShare().getShareImage().trim());
                     Utility.setAppShareImage(activity, responseModel.getAppShare().getShareImage().trim());
                 }
 

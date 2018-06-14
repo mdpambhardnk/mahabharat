@@ -1,14 +1,18 @@
 package com.jorjoto.mahabharat.activity;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -38,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     private static ArrayList<CategoryModel> data;
     public static int currenPage = 1, totalRecord = 0;
     private static CategoryModel notiModel;
+    public static final int REQUEST_WRITE_PERMISSION = 73;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +66,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public static void getVideoList(Activity activity, String page) {
+        if (page.equals("1")) {
+            rcList.setVisibility(View.GONE);
+            txtMessage.setVisibility(View.GONE);
+            probr.setVisibility(View.VISIBLE);
+        }
         RequestModel requestModel = new RequestModel();
         requestModel.setPage(page);
         new GetVideoListAsync(activity, requestModel);
@@ -76,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
         imgShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                share();
             }
         });
     }
@@ -86,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
         if (responseModel != null) {
             probr.setVisibility(View.GONE);
             txtMessage.setVisibility(View.GONE);
+            rcList.setVisibility(View.VISIBLE);
             if (responseModel.getMainData() != null && responseModel.getMainData().size() > 0) {
                 currenPage = Integer.parseInt(responseModel.getCurrentPage());
                 totalRecord = Integer.parseInt(responseModel.getTotalItems());
@@ -128,4 +139,26 @@ public class MainActivity extends AppCompatActivity {
             startActivity(in);
         }
     }
+
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (grantResults[0] == 0 && grantResults[1] == 0) {
+            Utility.shareImageData(MainActivity.this);
+        } else {
+            Utility.Notify(MainActivity.this, Global_App.APPNAME, "permission denied.");
+        }
+
+    }
+
+    public void share() {
+        if (Utility.getAppShareImage(MainActivity.this).trim().length() > 0) {
+            if (Build.VERSION.SDK_INT >= 23) {
+                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_WRITE_PERMISSION);
+            } else {
+                Utility.shareImageData(MainActivity.this);
+            }
+        } else {
+            Utility.shareImageData(MainActivity.this);
+        }
+    }
+
 }
