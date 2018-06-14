@@ -83,7 +83,7 @@ public class SuggestVideoListAdapter extends RecyclerView.Adapter<SuggestVideoLi
 
         if (data.get(position).getVideoLink().equals(YouTubeVideoActivity.currentVideo)) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                holder.loutMain.setBackground(activity.getResources().getDrawable(R.drawable.card_view_green));
+                holder.loutMain.setBackground(activity.getResources().getDrawable(R.drawable.card_view_red));
             }
         } else {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {

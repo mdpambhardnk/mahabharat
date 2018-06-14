@@ -1,7 +1,23 @@
 package com.jorjoto.mahabharat.model;
 
 public class CategoryModel {
-    String videoId, videoTitle, videoDescription, videoLink,videoThumb,image,title,message,setVideoId,redirectScreen,notificationID;
+    String videoId, shareImage,shareMessage,videoTitle, videoDescription, videoLink,videoThumb,image,title,message,setVideoId,redirectScreen,notificationID;
+
+    public String getShareImage() {
+        return shareImage;
+    }
+
+    public void setShareImage(String shareImage) {
+        this.shareImage = shareImage;
+    }
+
+    public String getShareMessage() {
+        return shareMessage;
+    }
+
+    public void setShareMessage(String shareMessage) {
+        this.shareMessage = shareMessage;
+    }
 
     public String getNotificationID() {
         return notificationID;

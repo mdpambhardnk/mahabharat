@@ -9,7 +9,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -23,6 +25,9 @@ import com.jorjoto.mahabharat.util.Global_App;
 import com.jorjoto.mahabharat.util.Utility;
 
 import java.util.ArrayList;
+
+import static com.jorjoto.mahabharat.activity.YouTubeVideoActivity.getVideoList;
+import static com.jorjoto.mahabharat.activity.YouTubeVideoActivity.responseModel;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -38,6 +43,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
+        setView();
+    }
+
+
+    private void setView() {
+        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        getSupportActionBar().setDisplayShowCustomEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        setHeaderView("Home");
         probr = (ProgressBar) findViewById(R.id.probr);
         txtMessage = (TextView) findViewById(R.id.txtMessage);
         rcList = (RecyclerView) findViewById(R.id.rcList);
@@ -50,6 +65,22 @@ public class MainActivity extends AppCompatActivity {
         requestModel.setPage(page);
         new GetVideoListAsync(activity, requestModel);
     }
+
+    public void setHeaderView(String title) {
+        View v = LayoutInflater.from(this).inflate(R.layout.actionbar_home, null);
+        TextView action_bar_title = (TextView) v.findViewById(R.id.action_bar_title);
+        action_bar_title.setText(title);
+        ImageView imgShare = (ImageView) v.findViewById(R.id.imgShare);
+        imgShare.setImageResource(R.drawable.icon_share);
+        getSupportActionBar().setCustomView(v);
+        imgShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+    }
+
 
     public static void setVideoData(Activity activity, ResponseModel responseModel) {
         if (responseModel != null) {
@@ -92,8 +123,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void FromNotification(CategoryModel notificationModel) {
         if (notificationModel.getRedirectScreen() != null && notificationModel.getRedirectScreen().equals(Global_App.SCREEN_VIDEODETAILS)) {
-            Intent in=new Intent(MainActivity.this,YouTubeVideoActivity.class);
-            in.putExtra("videoId",notificationModel.getVideoId());
+            Intent in = new Intent(MainActivity.this, YouTubeVideoActivity.class);
+            in.putExtra("videoId", notificationModel.getVideoId());
             startActivity(in);
         }
     }

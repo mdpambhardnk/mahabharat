@@ -57,7 +57,20 @@ public class DeviceRegistorAsync {
     protected void onPostExecute(ResponseModel responseModel) {
         try {
             if (responseModel.getStatus().equals(Global_App.STATUS_SUCCESS)) {
-                Utility.setIsDeviceRegistor(activity, "1");
+
+                if (responseModel.getAppShare().getShareImage() != null) {
+                    Utility.setAppShareImage(activity, responseModel.getAppShare().getShareImage().trim());
+                }
+
+                if (responseModel.getAppShare().getShareMessage() != null) {
+                    Utility.setAppShareMessage(activity, responseModel.getAppShare().getShareMessage().trim());
+                }
+
+                if (responseModel.getAppShareCount() != null && !responseModel.getAppShareCount().equals("")) {
+                    Utility.setAppShareCount(activity, Integer.parseInt(responseModel.getAppShareCount()));
+                }
+
+
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     public void run() {
@@ -65,7 +78,7 @@ public class DeviceRegistorAsync {
                         activity.startActivity(in);
                         activity.finish();
                     }
-                }, 5000);
+                }, 2800);
 
             } else if (responseModel.getStatus().equals(Global_App.STATUS_ERROR)) {
                 Utility.Notify(activity, Global_App.APPNAME, responseModel.getMessage());

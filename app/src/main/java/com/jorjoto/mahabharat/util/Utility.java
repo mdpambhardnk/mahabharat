@@ -106,6 +106,47 @@ public class Utility {
         editor.commit();
     }
 
+    public static String getAppShareImage(Context activity) {
+        SharedPreferences pref = activity.getSharedPreferences("appShareImage", 0);
+        String token = pref.getString("appShareImage", "");
+        return token;
+    }
+
+    public static void setAppShareImage(Context activity, String flag) {
+        SharedPreferences pref = activity.getSharedPreferences("appShareImage", 0);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putString("appShareImage", flag);
+        editor.commit();
+    }
+
+
+    public static String getAppShareMessage(Context activity) {
+        SharedPreferences pref = activity.getSharedPreferences("AppShareMessage", 0);
+        String token = pref.getString("AppShareMessage", "");
+        return token;
+    }
+
+    public static void setAppShareMessage(Context activity, String flag) {
+        SharedPreferences pref = activity.getSharedPreferences("appShareImage", 0);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putString("appShareImage", flag);
+        editor.commit();
+    }
+
+
+    public static int getAppShareCount(Context activity) {
+        SharedPreferences pref = activity.getSharedPreferences("AppShareCount", 0);
+        int token = pref.getInt("AppShareCount", 0);
+        return token;
+    }
+
+    public static void setAppShareCount(Context activity, int flag) {
+        SharedPreferences pref = activity.getSharedPreferences("AppShareCount", 0);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putInt("AppShareCount", flag);
+        editor.commit();
+    }
+
     public static CategoryModel getNotificationData(Context activity) {
         try {
             JSONObject jSONObject = new JSONObject(PreferenceManager.getDefaultSharedPreferences(activity).getString("NDATA", ""));

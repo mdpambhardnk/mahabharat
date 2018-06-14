@@ -79,7 +79,7 @@ public class SplashScreenActivity extends AppCompatActivity {
                         startActivity(in);
                         finish();
                     }
-                }, 5600);
+                }, 3900);
             } else {
                 Utility.setTodayDate(SplashScreenActivity.this, currentDateTimeString);
                 if (Utility.getFCMRegId(SplashScreenActivity.this).trim().length() > 0) {

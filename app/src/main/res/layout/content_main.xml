@@ -142,9 +142,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="15dp"
         android:layout_marginRight="24dp"
-        android:background="@drawable/tumblr_menu_oval"
         android:padding="15dp"
-        android:src="@drawable/plus"
-        android:textColor="#FFF"
+        android:background="@drawable/icon_logo_feb"
         android:visibility="gone" />
 </RelativeLayout>

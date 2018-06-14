@@ -3,9 +3,25 @@ package com.jorjoto.mahabharat.model;
 import java.util.ArrayList;
 
 public class ResponseModel {
-    String status, message,totalItems,totalPages,currentPage;
+    String status, message,totalItems,totalPages,currentPage,appShareCount;
     ArrayList<CategoryModel> mainData,relatedVideos;
-    CategoryModel videoData;
+    CategoryModel videoData,appShare;
+
+    public String getAppShareCount() {
+        return appShareCount;
+    }
+
+    public void setAppShareCount(String appShareCount) {
+        this.appShareCount = appShareCount;
+    }
+
+    public CategoryModel getAppShare() {
+        return appShare;
+    }
+
+    public void setAppShare(CategoryModel appShare) {
+        this.appShare = appShare;
+    }
 
     public ArrayList<CategoryModel> getRelatedVideos() {
         return relatedVideos;

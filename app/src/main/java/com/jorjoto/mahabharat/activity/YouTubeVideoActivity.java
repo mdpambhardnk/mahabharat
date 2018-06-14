@@ -267,16 +267,12 @@ public class YouTubeVideoActivity extends YouTubeBaseActivity implements YouTube
 
     private void onFabClick(View v) {
         if (v.isSelected()) {
-            fab.setRotation(90);
             hideMenu();
         } else {
-            fab.setRotation(45);
             showMenu();
         }
         v.setSelected(!v.isSelected());
     }
-
-    @SuppressWarnings("NewApi")
     private void showMenu() {
         menuLayout.setVisibility(View.VISIBLE);
 
