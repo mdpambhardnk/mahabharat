@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "279915863980",
+    "firebase_url": "https://mahabharat-22c27.firebaseio.com",
+    "project_id": "mahabharat-22c27",
+    "storage_bucket": "mahabharat-22c27.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:279915863980:android:dfe9a073960379dc",
+        "android_client_info": {
+          "package_name": "com.jorjoto.mahabharat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "279915863980-j5o029aba181ibbpvoc04bn0qq23n48j.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "279915863980-j5o029aba181ibbpvoc04bn0qq23n48j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDBrClm3kqqZxT2ZT2fGVzzQdqd0J5s0Xw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

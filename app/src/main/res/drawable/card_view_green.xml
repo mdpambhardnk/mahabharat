@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- solids that simulate shadow !-->
+    <item>
+        <shape>
+            <corners android:radius="2dp"></corners>
+            <solid android:color="#10047913" />
+            <padding
+                android:top="1dp"
+                android:right="1dp"
+                android:bottom="1dp"
+                android:left="1dp" />
+        </shape>
+    </item>
+
+    <item>
+        <shape>
+            <corners android:radius="2dp"></corners>
+            <solid android:color="#20047913" />
+            <padding
+                android:top="1dp"
+                android:right="1dp"
+                android:bottom="1dp"
+                android:left="1dp" />
+        </shape>
+    </item>
+
+    <item>
+        <shape>
+            <corners android:radius="2dp"></corners>
+            <solid android:color="#40047913" />
+            <padding
+                android:top="2dp"
+                android:right="2dp"
+                android:bottom="2dp"
+                android:left="2dp" />
+        </shape>
+    </item>
+    <item>
+        <shape>
+            <corners android:radius="2dp"></corners>
+            <solid android:color="#ffffff" />
+        </shape>
+    </item>
+
+
+</layer-list>
