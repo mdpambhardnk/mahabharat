@@ -6,8 +6,6 @@ import android.os.Handler;
 import android.util.Log;
 
 import com.jorjoto.mahabharat.activity.MainActivity;
-import com.jorjoto.mahabharat.activity.SplashScreenActivity;
-import com.jorjoto.mahabharat.activity.YouTubeVideoActivity;
 import com.jorjoto.mahabharat.model.RequestModel;
 import com.jorjoto.mahabharat.model.ResponseModel;
 import com.jorjoto.mahabharat.util.ApiClient;

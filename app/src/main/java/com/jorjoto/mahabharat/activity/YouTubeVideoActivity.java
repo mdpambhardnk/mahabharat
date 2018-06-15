@@ -29,6 +29,7 @@ import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayer.Provider;
 import com.google.android.youtube.player.YouTubePlayerView;
 import com.jorjoto.mahabharat.R;
+import com.jorjoto.mahabharat.adapter.SuggestAppListAdapter;
 import com.jorjoto.mahabharat.adapter.SuggestVideoListAdapter;
 import com.jorjoto.mahabharat.async.GetVideoDetailsAsync;
 import com.jorjoto.mahabharat.async.GetVideoListAsync;
@@ -65,6 +66,9 @@ public class YouTubeVideoActivity extends YouTubeBaseActivity implements YouTube
     static ResponseModel responseModel;
     SuggestVideoListAdapter suggestVideoListAdapter;
     public static final int REQUEST_WRITE_PERMISSION = 73;
+    private LinearLayout loutApps;
+    private RecyclerView rcApps;
+    SuggestAppListAdapter suggestAppListAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +86,9 @@ public class YouTubeVideoActivity extends YouTubeBaseActivity implements YouTube
         prpobr = (ProgressBar) findViewById(R.id.prpobr);
         txtMessage = (TextView) findViewById(R.id.txtMessage);
         loutMian = (LinearLayout) findViewById(R.id.loutMian);
+        loutApps = (LinearLayout) findViewById(R.id.loutApps);
         rcSuggestList = (RecyclerView) findViewById(R.id.rcSuggestList);
+        rcApps = (RecyclerView) findViewById(R.id.rcApps);
         fab = (ImageView) findViewById(R.id.fab);
         arcLayout = (ArcLayout) findViewById(R.id.arc_layout);
         txtTitle = (TextView) findViewById(R.id.txtTitle);
@@ -110,6 +116,15 @@ public class YouTubeVideoActivity extends YouTubeBaseActivity implements YouTube
             suggestVideoListAdapter = new SuggestVideoListAdapter(activity, responseModel.getRelatedVideos());
             rcSuggestList.setAdapter(suggestVideoListAdapter);
             fab.setVisibility(View.VISIBLE);
+            if (responseModel.getSuggestedApps() != null && responseModel.getSuggestedApps().size() > 0) {
+                loutApps.setVisibility(View.VISIBLE);
+                rcApps.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false));
+                suggestAppListAdapter = new SuggestAppListAdapter(activity, responseModel.getSuggestedApps());
+                rcApps.setAdapter(suggestAppListAdapter);
+            } else {
+                loutApps.setVisibility(View.GONE);
+            }
+
         } else {
             prpobr.setVisibility(View.GONE);
             loutMian.setVisibility(View.GONE);

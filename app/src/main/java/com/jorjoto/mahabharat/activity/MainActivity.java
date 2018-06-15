@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -18,6 +19,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jorjoto.mahabharat.R;
 import com.jorjoto.mahabharat.adapter.HomeVideoListAdapter;
@@ -43,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     public static int currenPage = 1, totalRecord = 0;
     private static CategoryModel notiModel;
     public static final int REQUEST_WRITE_PERMISSION = 73;
+    public static boolean isFirstBack = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -161,4 +164,19 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        if (isFirstBack) {
+            super.onBackPressed();
+            return;
+        }
+        this.isFirstBack = true;
+        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                isFirstBack = false;
+            }
+        }, 2000);
+    }
 }

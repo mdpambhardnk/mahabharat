@@ -4,8 +4,16 @@ import java.util.ArrayList;
 
 public class ResponseModel {
     String status, message,totalItems,totalPages,currentPage,appShareCount;
-    ArrayList<CategoryModel> mainData,relatedVideos;
+    ArrayList<CategoryModel> mainData,relatedVideos,SuggestedApps;
     CategoryModel videoData,appShare;
+
+    public ArrayList<CategoryModel> getSuggestedApps() {
+        return SuggestedApps;
+    }
+
+    public void setSuggestedApps(ArrayList<CategoryModel> suggestedApps) {
+        SuggestedApps = suggestedApps;
+    }
 
     public String getAppShareCount() {
         return appShareCount;
