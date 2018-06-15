@@ -11,14 +11,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -34,11 +31,14 @@ import com.jorjoto.mahabharat.R;
 import com.jorjoto.mahabharat.adapter.SuggestAppListAdapter;
 import com.jorjoto.mahabharat.adapter.SuggestVideoListAdapter;
 import com.jorjoto.mahabharat.async.GetVideoDetailsAsync;
+import com.jorjoto.mahabharat.model.CategoryModel;
 import com.jorjoto.mahabharat.model.RequestModel;
 import com.jorjoto.mahabharat.model.ResponseModel;
 import com.jorjoto.mahabharat.util.Global_App;
 import com.jorjoto.mahabharat.util.Utility;
 import com.sa90.materialarcmenu.ArcMenu;
+
+import java.util.ArrayList;
 
 public class YouTubeVideoActivity extends YouTubeBaseActivity implements YouTubePlayer.OnInitializedListener {
     Toast toast = null;
@@ -63,6 +63,7 @@ public class YouTubeVideoActivity extends YouTubeBaseActivity implements YouTube
     private RecyclerView rcApps;
     SuggestAppListAdapter suggestAppListAdapter;
     private ArcMenu arcMenu;
+    ArrayList<CategoryModel> appList;
 
 
     @Override
@@ -159,11 +160,24 @@ public class YouTubeVideoActivity extends YouTubeBaseActivity implements YouTube
             suggestVideoListAdapter = new SuggestVideoListAdapter(activity, responseModel.getRelatedVideos());
             rcSuggestList.setAdapter(suggestVideoListAdapter);
             // fab.setVisibility(View.VISIBLE);
+
+
             if (responseModel.getSuggestedApps() != null && responseModel.getSuggestedApps().size() > 0) {
-                loutApps.setVisibility(View.VISIBLE);
-                rcApps.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false));
-                suggestAppListAdapter = new SuggestAppListAdapter(activity, responseModel.getSuggestedApps());
-                rcApps.setAdapter(suggestAppListAdapter);
+                appList = new ArrayList<CategoryModel>();
+                for (int i = 0; i < responseModel.getSuggestedApps().size(); i++) {
+                    if (!Utility.isAppInstalled(activity, responseModel.getSuggestedApps().get(i).getAppPackage())) {
+                        appList.add(responseModel.getSuggestedApps().get(i));
+                    }
+                }
+                if (appList != null && appList.size() > 0) {
+                    loutApps.setVisibility(View.VISIBLE);
+                    rcApps.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false));
+                    suggestAppListAdapter = new SuggestAppListAdapter(activity, appList);
+                    rcApps.setAdapter(suggestAppListAdapter);
+                } else {
+                    loutApps.setVisibility(View.GONE);
+                }
+
             } else {
                 loutApps.setVisibility(View.GONE);
             }
