@@ -27,6 +27,9 @@ import com.jorjoto.mahabharat.model.CategoryModel;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.net.URLConnection;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Utility {
     private static CategoryModel notificationModel;
@@ -128,6 +131,19 @@ public class Utility {
         editor.commit();
     }
 
+    public static int getClickCount(Context activity) {
+        SharedPreferences pref = activity.getSharedPreferences("ClickCount", 0);
+        int token = pref.getInt("ClickCount", 0);
+        return token;
+    }
+
+    public static void setClickCount(Context activity, int flag) {
+        SharedPreferences pref = activity.getSharedPreferences("ClickCount", 0);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putInt("ClickCount", flag);
+        editor.commit();
+    }
+
 
     public static String getAppShareMessage(Context activity) {
         SharedPreferences pref = activity.getSharedPreferences("AppShareMessage", 0);
@@ -139,6 +155,19 @@ public class Utility {
         SharedPreferences pref = activity.getSharedPreferences("AppShareMessage", 0);
         SharedPreferences.Editor editor = pref.edit();
         editor.putString("AppShareMessage", flag);
+        editor.commit();
+    }
+
+    public static String getAppMessage(Context activity) {
+        SharedPreferences pref = activity.getSharedPreferences("AppMessage", 0);
+        String token = pref.getString("AppMessage", "");
+        return token;
+    }
+
+    public static void setAppMessage(Context activity, String flag) {
+        SharedPreferences pref = activity.getSharedPreferences("AppMessage", 0);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putString("AppMessage", flag);
         editor.commit();
     }
 
@@ -296,12 +325,13 @@ public class Utility {
                     share.setType("image/*");
                     share.putExtra(Intent.EXTRA_STREAM, uri);
 //                    if (Build.VERSION.SDK_INT >= 24) {
+//                    intent1.setDataAndType(uri, URLConnection.guessContentTypeFromName(uri.toString()));
 //                        share.setDataAndType(FileProvider.getUriForFile(activity.getApplicationContext(), "com.jorjoto.mahabharat", file), "image/jpg");
 //                    } else {
 //                        share.setType("image/*");
 //                        share.putExtra(Intent.EXTRA_STREAM, uri);
 //                    }
-                    share.putExtra(Intent.EXTRA_SUBJECT, Global_App.APPNAME );
+                    share.putExtra(Intent.EXTRA_SUBJECT, Global_App.APPNAME);
                     share.putExtra(Intent.EXTRA_TEXT, getAppShareMessage(activity));
                     activity.startActivity(Intent.createChooser(share, "Share"));
 
@@ -324,6 +354,22 @@ public class Utility {
                 e2.printStackTrace();
             }
         }
+    }
+
+    public static void setEnableDisablebtn(final Activity activity, final View view) {
+        view.setEnabled(false);
+        Timer buttonTimer = new Timer();
+        buttonTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        view.setEnabled(true);
+                    }
+                });
+            }
+        }, 1500);
     }
 
     public static boolean isAppInstalled(Activity activity, String packageName) {

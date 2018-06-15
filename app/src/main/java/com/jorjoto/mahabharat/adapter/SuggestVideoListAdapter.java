@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.jorjoto.mahabharat.R;
 import com.jorjoto.mahabharat.activity.YouTubeVideoActivity;
 import com.jorjoto.mahabharat.model.CategoryModel;
+import com.jorjoto.mahabharat.util.Utility;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -94,9 +95,15 @@ public class SuggestVideoListAdapter extends RecyclerView.Adapter<SuggestVideoLi
             @Override
             public void onClick(View v) {
                 if (!data.get(position).getVideoLink().equals(YouTubeVideoActivity.currentVideo)) {
-                    YouTubeVideoActivity.youTubePlayer.cueVideo(data.get(position).getVideoLink());
-                    YouTubeVideoActivity.currentVideo = data.get(position).getVideoLink();
-                    notifyDataSetChanged();
+                    if (Utility.getClickCount(activity) >= Utility.getAppShareCount(activity)) {
+                        ((YouTubeVideoActivity)activity).NotifyMessage(activity,"Share");
+                    } else {
+                        Utility.setClickCount(activity, Utility.getClickCount(activity) + 1);
+                        YouTubeVideoActivity.youTubePlayer.cueVideo(data.get(position).getVideoLink());
+                        YouTubeVideoActivity.currentVideo = data.get(position).getVideoLink();
+                        notifyDataSetChanged();
+                    }
+
                 }
             }
         });

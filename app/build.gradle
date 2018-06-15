@@ -12,7 +12,8 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            shrinkResources true
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -26,13 +27,13 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    implementation 'com.google.firebase:firebase-core:16.0.0'
     implementation 'com.google.code.gson:gson:2.8.2'
     implementation 'com.squareup.picasso:picasso:2.5.2'
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
     implementation 'com.google.firebase:firebase-messaging:17.0.0'
     implementation files('libs/YouTubeAndroidPlayerApi.jar')
-    implementation 'com.ogaclejapan.arclayout:library:1.1.0@aar'
+    implementation 'com.google.android.gms:play-services-analytics:16.0.0'
+    implementation 'com.sa90.materialarcmenu:library:1.5.0'
 }
 apply plugin: 'com.google.gms.google-services'

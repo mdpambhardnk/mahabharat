@@ -58,12 +58,14 @@ public class DeviceRegistorAsync {
             if (responseModel.getStatus().equals(Global_App.STATUS_SUCCESS)) {
 
                 if (responseModel.getAppShare().getShareImage() != null) {
-                    Log.v("AAAAA",""+responseModel.getAppShare().getShareImage().trim());
                     Utility.setAppShareImage(activity, responseModel.getAppShare().getShareImage().trim());
                 }
 
                 if (responseModel.getAppShare().getShareMessage() != null) {
                     Utility.setAppShareMessage(activity, responseModel.getAppShare().getShareMessage().trim());
+                }
+                if (responseModel.getAppShare().getAppMessage() != null) {
+                    Utility.setAppMessage(activity, responseModel.getAppShare().getAppMessage().trim());
                 }
 
                 if (responseModel.getAppShareCount() != null && !responseModel.getAppShareCount().equals("")) {

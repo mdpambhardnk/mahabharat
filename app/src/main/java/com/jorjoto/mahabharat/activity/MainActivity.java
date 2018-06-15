@@ -3,6 +3,7 @@ package com.jorjoto.mahabharat.activity;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -21,12 +22,14 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jorjoto.mahabharat.MyApplication;
 import com.jorjoto.mahabharat.R;
 import com.jorjoto.mahabharat.adapter.HomeVideoListAdapter;
 import com.jorjoto.mahabharat.async.GetVideoListAsync;
 import com.jorjoto.mahabharat.model.CategoryModel;
 import com.jorjoto.mahabharat.model.RequestModel;
 import com.jorjoto.mahabharat.model.ResponseModel;
+import com.jorjoto.mahabharat.util.AnalyticsTrackers;
 import com.jorjoto.mahabharat.util.Global_App;
 import com.jorjoto.mahabharat.util.Utility;
 
@@ -52,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
         setView();
+        MyApplication.getInstance().trackScreenView("MainActivity");
     }
 
 
@@ -155,12 +159,19 @@ public class MainActivity extends AppCompatActivity {
     public void share() {
         if (Utility.getAppShareImage(MainActivity.this).trim().length() > 0) {
             if (Build.VERSION.SDK_INT >= 23) {
-                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_WRITE_PERMISSION);
+                int hasWriteContactsPermission = checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                int hasWriteContactsPermission1 = checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
+                if (hasWriteContactsPermission != PackageManager.PERMISSION_GRANTED || hasWriteContactsPermission1 != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 73);
+                } else {
+                    Utility.shareImageData(MainActivity.this);
+                }
             } else {
                 Utility.shareImageData(MainActivity.this);
             }
         } else {
             Utility.shareImageData(MainActivity.this);
+
         }
     }
 

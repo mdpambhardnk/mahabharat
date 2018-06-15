@@ -69,10 +69,10 @@
 
         <ImageView
             android:id="@+id/imgicone"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
             android:layout_centerInParent="true"
-            android:src="@drawable/icon_diloage_notify" />
+            android:src="@drawable/icon_logo_feb" />
 
     </RelativeLayout>
 

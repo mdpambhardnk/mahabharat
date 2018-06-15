@@ -9,109 +9,115 @@
     tools:context=".activity.YouTubeVideoActivity"
     tools:showIn="@layout/activity_main">
 
-    <LinearLayout
-        android:id="@+id/loutMian"
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:orientation="vertical"
-        android:visibility="gone">
+        android:layout_height="wrap_content">
 
         <LinearLayout
+            android:id="@+id/loutMian"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <com.google.android.youtube.player.YouTubePlayerView
-                android:id="@+id/youtube_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+            android:layout_alignParentTop="true"
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
+                android:orientation="vertical">
+
+                <com.google.android.youtube.player.YouTubePlayerView
+                    android:id="@+id/youtube_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/card_view"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:id="@+id/txtTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:maxLines="2"
+                        android:textColor="@color/title"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/txtDescription"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:maxLines="3"
+                        android:textColor="@color/textColorPrimary"
+                        android:textSize="12sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/loutVideo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="-5dp"
                 android:background="@drawable/card_view"
                 android:orientation="vertical"
-                android:padding="10dp">
+                android:padding="5dp">
 
                 <TextView
-                    android:id="@+id/txtTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:maxLines="2"
-                    android:textColor="@color/title"
-                    android:textSize="16sp" />
+                    android:layout_marginLeft="10dp"
+                    android:text="Suggested Video"
+                    android:textColor="@color/black"
+                    android:textSize="16dp"
+                    android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/txtDescription"
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rcSuggestList"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:maxLines="3"
-                    android:textColor="@color/textColorPrimary"
-                    android:textSize="12sp" />
+                    android:layout_marginBottom="5dp" />
             </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/loutApps"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="-5dp"
+                android:background="@drawable/card_view"
+                android:orientation="vertical"
+                android:padding="5dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="Suggested Apps"
+                    android:textColor="@color/black"
+                    android:textSize="16dp"
+                    android:textStyle="bold" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rcApps"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp" />
+            </LinearLayout>
+
+
         </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
 
-        <LinearLayout
-            android:id="@+id/loutVideo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginTop="-5dp"
-            android:background="@drawable/card_view"
-            android:orientation="vertical"
-            android:padding="5dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:text="Suggested Video"
-                android:textColor="@color/black"
-                android:textSize="16dp"
-                android:textStyle="bold" />
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rcSuggestList"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp" />
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:id="@+id/loutApps"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginTop="-5dp"
-            android:background="@drawable/card_view"
-            android:orientation="vertical"
-            android:padding="5dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:text="Suggested Apps"
-                android:textColor="@color/black"
-                android:textSize="16dp"
-                android:textStyle="bold" />
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rcApps"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp" />
-        </LinearLayout>
-
-
-    </LinearLayout>
 
     <ProgressBar
         android:id="@+id/prpobr"
@@ -128,47 +134,49 @@
         android:textSize="16sp"
         android:visibility="gone" />
 
-    <FrameLayout
-        android:id="@+id/menu_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/scrim"
-        android:visibility="invisible">
 
-        <com.ogaclejapan.arclayout.ArcLayout
-            android:id="@+id/arc_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="32dp"
-            app:arc_axisRadius="@dimen/layout_child_offset_path"
-            app:arc_freeAngle="true"
-            app:arc_origin="bottom"
-            app:arc_radius="@dimen/layout_radius_path">
-
-            <ImageView
-                android:id="@+id/imgShare"
-                style="@style/Item.Path"
-                android:src="@drawable/icon_share"
-                app:arc_angle="60" />
-
-            <ImageView
-                android:id="@+id/imgList"
-                style="@style/Item.Path"
-                android:src="@drawable/icon_video"
-                app:arc_angle="120" />
-
-        </com.ogaclejapan.arclayout.ArcLayout>
-    </FrameLayout>
-
-    <ImageView
-        android:id="@+id/fab"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
+    <com.sa90.materialarcmenu.ArcMenu
+        android:id="@+id/arcMenu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="15dp"
-        android:layout_marginRight="24dp"
-        android:background="@drawable/icon_logo_feb"
-        android:padding="15dp"
-        android:visibility="gone" />
+        android:layout_alignParentRight="true"
+        android:layout_gravity="bottom|end"
+        android:visibility="visible"
+        app:fabSize="normal"
+        app:menu_open="arc_left"
+        app:menu_scr="@drawable/icon_logo_yellow">
+
+
+        <ImageView
+            android:id="@+id/imgShare"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/tumblr_menu_oval"
+            android:padding="7dp"
+            android:src="@drawable/icon_share"
+            android:tint="@color/white" />
+
+        <ImageView
+            android:id="@+id/imgVideo"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:background="@drawable/tumblr_menu_oval"
+            android:padding="7dp"
+            android:src="@drawable/icon_video"
+            android:tint="@color/white" />
+
+        <ImageView
+            android:id="@+id/imgContactUs"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:background="@drawable/tumblr_menu_oval"
+            android:padding="8dp"
+            android:src="@drawable/icon_contact_us"
+            android:tint="@color/white" />
+
+
+    </com.sa90.materialarcmenu.ArcMenu>
+
 </RelativeLayout>

@@ -1,22 +1,23 @@
 package com.jorjoto.mahabharat.activity;
 
 import android.Manifest;
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
 import android.view.Window;
-import android.view.animation.AnticipateInterpolator;
-import android.view.animation.OvershootInterpolator;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -28,23 +29,18 @@ import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayer.Provider;
 import com.google.android.youtube.player.YouTubePlayerView;
+import com.jorjoto.mahabharat.MyApplication;
 import com.jorjoto.mahabharat.R;
 import com.jorjoto.mahabharat.adapter.SuggestAppListAdapter;
 import com.jorjoto.mahabharat.adapter.SuggestVideoListAdapter;
 import com.jorjoto.mahabharat.async.GetVideoDetailsAsync;
-import com.jorjoto.mahabharat.async.GetVideoListAsync;
-import com.jorjoto.mahabharat.model.CategoryModel;
 import com.jorjoto.mahabharat.model.RequestModel;
 import com.jorjoto.mahabharat.model.ResponseModel;
-import com.jorjoto.mahabharat.util.AnimatorUtils;
 import com.jorjoto.mahabharat.util.Global_App;
 import com.jorjoto.mahabharat.util.Utility;
-import com.ogaclejapan.arclayout.ArcLayout;
+import com.sa90.materialarcmenu.ArcMenu;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class YouTubeVideoActivity extends YouTubeBaseActivity implements YouTubePlayer.OnInitializedListener, View.OnClickListener {
+public class YouTubeVideoActivity extends YouTubeBaseActivity implements YouTubePlayer.OnInitializedListener {
     Toast toast = null;
     private static YouTubePlayerView youTubeView;
     private static final int RECOVERY_REQUEST = 1;
@@ -52,9 +48,6 @@ public class YouTubeVideoActivity extends YouTubeBaseActivity implements YouTube
     private MyPlayerStateChangeListener playerStateChangeListener;
     private MyPlaybackEventListener playbackEventListener;
     public static YouTubePlayer youTubePlayer;
-    private static ImageView fab;
-    private static ArcLayout arcLayout;
-    private static View menuLayout;
     private static LinearLayout loutMian;
     private static ProgressBar prpobr;
     private static TextView txtMessage;
@@ -69,6 +62,8 @@ public class YouTubeVideoActivity extends YouTubeBaseActivity implements YouTube
     private LinearLayout loutApps;
     private RecyclerView rcApps;
     SuggestAppListAdapter suggestAppListAdapter;
+    private ArcMenu arcMenu;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +71,6 @@ public class YouTubeVideoActivity extends YouTubeBaseActivity implements YouTube
         setContentView(R.layout.activity_main);
         Intent intent = getIntent();
         videoId = intent.getStringExtra("videoId");
-        Log.v("AAAAAA", "" + videoId);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = YouTubeVideoActivity.this.getWindow();
             window.setStatusBarColor(getResources().getColor(R.color.black));
@@ -89,24 +83,73 @@ public class YouTubeVideoActivity extends YouTubeBaseActivity implements YouTube
         loutApps = (LinearLayout) findViewById(R.id.loutApps);
         rcSuggestList = (RecyclerView) findViewById(R.id.rcSuggestList);
         rcApps = (RecyclerView) findViewById(R.id.rcApps);
-        fab = (ImageView) findViewById(R.id.fab);
-        arcLayout = (ArcLayout) findViewById(R.id.arc_layout);
         txtTitle = (TextView) findViewById(R.id.txtTitle);
         txtDescription = (TextView) findViewById(R.id.txtDescription);
-        menuLayout = findViewById(R.id.menu_layout);
-        for (int i = 0, size = arcLayout.getChildCount(); i < size; i++) {
-            arcLayout.getChildAt(i).setOnClickListener(this);
-        }
-        fab.setOnClickListener(this);
 
+        arcMenu = (ArcMenu) findViewById(R.id.arcMenu);
+        arcMenu.setRadius(getResources().getDimension(R.dimen.radius));
+        arcMenu.setVisibility(View.GONE);
+        findViewById(R.id.imgShare).setOnClickListener(imgShare);
+        findViewById(R.id.imgVideo).setOnClickListener(imgVideo);
+        findViewById(R.id.imgContactUs).setOnClickListener(imgContactUs);
+        MyApplication.getInstance().trackScreenView("YouTubeVideoActivity");
 
     }
+
+    private View.OnClickListener imgShare = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            share();
+            arcMenu.toggleMenu();
+
+        }
+    };
+
+    private View.OnClickListener imgVideo = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            arcMenu.toggleMenu();
+            MainActivity.getVideoList(YouTubeVideoActivity.this, "1");
+            finish();
+        }
+    };
+
+    private View.OnClickListener imgContactUs = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (Utility.checkInternetConnection(YouTubeVideoActivity.this)) {
+                Utility.setEnableDisablebtn(YouTubeVideoActivity.this, v);
+                PackageInfo pInfo = null;
+                try {
+                    pInfo = getPackageManager().getPackageInfo(YouTubeVideoActivity.this.getPackageName(), 0);
+                } catch (PackageManager.NameNotFoundException e) {
+                    e.printStackTrace();
+                }
+                String DEVICE_VERSION = android.os.Build.VERSION.RELEASE;
+                String DEVICE_NAME = android.os.Build.MODEL;
+                String to = Global_App.FEEDBACK_EMAIL;
+                String subject = "Feedback";
+                String message = "\n\n\n-------------------------------------------------------\n " + Global_App.APPNAME + " V " + pInfo.versionName + " on " + DEVICE_NAME + " running android " + DEVICE_VERSION;
+                Intent email = new Intent(Intent.ACTION_SEND);
+                email.setPackage("com.google.android.gm");
+                email.putExtra(Intent.EXTRA_EMAIL, new String[]{to});
+                email.putExtra(Intent.EXTRA_SUBJECT, subject);
+                email.putExtra(Intent.EXTRA_TEXT, message);
+                email.setType("message/rfc822");
+                startActivity(Intent.createChooser(email, "Send Email Using: "));
+            }
+            arcMenu.toggleMenu();
+
+        }
+    };
+
 
     public void setVideoData(Activity activity, ResponseModel responseModeldata) {
         if (responseModeldata != null) {
             prpobr.setVisibility(View.GONE);
             txtMessage.setVisibility(View.GONE);
             loutMian.setVisibility(View.VISIBLE);
+            arcMenu.setVisibility(View.VISIBLE);
             responseModel = responseModeldata;
             youTubePlayer.cueVideo(responseModel.getVideoData().getVideoLink());
             currentVideo = responseModel.getVideoData().getVideoLink();
@@ -115,7 +158,7 @@ public class YouTubeVideoActivity extends YouTubeBaseActivity implements YouTube
             rcSuggestList.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false));
             suggestVideoListAdapter = new SuggestVideoListAdapter(activity, responseModel.getRelatedVideos());
             rcSuggestList.setAdapter(suggestVideoListAdapter);
-            fab.setVisibility(View.VISIBLE);
+            // fab.setVisibility(View.VISIBLE);
             if (responseModel.getSuggestedApps() != null && responseModel.getSuggestedApps().size() > 0) {
                 loutApps.setVisibility(View.VISIBLE);
                 rcApps.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false));
@@ -177,25 +220,6 @@ public class YouTubeVideoActivity extends YouTubeBaseActivity implements YouTube
 
     private void showMessage(String message) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void onClick(View v) {
-        if (v.getId() == R.id.fab) {
-            onFabClick(v);
-            return;
-        }
-
-        if (v instanceof ImageView) {
-            if (v.getId() == R.id.imgShare) {
-                share();
-                hideMenu();
-            } else if (v.getId() == R.id.imgList) {
-                onFabClick(v);
-                MainActivity.getVideoList(YouTubeVideoActivity.this, "1");
-                finish();
-            }
-        }
     }
 
 
@@ -269,7 +293,6 @@ public class YouTubeVideoActivity extends YouTubeBaseActivity implements YouTube
 
     @Override
     public void onBackPressed() {
-        Log.v("AAAAAAA", "back " + fullScreen);
         if (fullScreen) {
             youTubePlayer.setFullscreen(false);
         } else {
@@ -278,100 +301,10 @@ public class YouTubeVideoActivity extends YouTubeBaseActivity implements YouTube
     }
 
 
-    private void onFabClick(View v) {
-        if (v.isSelected()) {
-            hideMenu();
-        } else {
-            showMenu();
-        }
-        v.setSelected(!v.isSelected());
-    }
-
-    private void showMenu() {
-        menuLayout.setVisibility(View.VISIBLE);
-
-        List<Animator> animList = new ArrayList<>();
-
-        for (int i = 0, len = arcLayout.getChildCount(); i < len; i++) {
-            animList.add(createShowItemAnimator(arcLayout.getChildAt(i)));
-        }
-
-        AnimatorSet animSet = new AnimatorSet();
-        animSet.setDuration(400);
-        animSet.setInterpolator(new OvershootInterpolator());
-        animSet.playTogether(animList);
-        animSet.start();
-    }
-
-    @SuppressWarnings("NewApi")
-    private void hideMenu() {
-
-        List<Animator> animList = new ArrayList<>();
-
-        for (int i = arcLayout.getChildCount() - 1; i >= 0; i--) {
-            animList.add(createHideItemAnimator(arcLayout.getChildAt(i)));
-        }
-
-        AnimatorSet animSet = new AnimatorSet();
-        animSet.setDuration(400);
-        animSet.setInterpolator(new AnticipateInterpolator());
-        animSet.playTogether(animList);
-        animSet.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-                menuLayout.setVisibility(View.INVISIBLE);
-            }
-        });
-        animSet.start();
-
-    }
-
-    private Animator createShowItemAnimator(View item) {
-
-        float dx = fab.getX() - item.getX();
-        float dy = fab.getY() - item.getY();
-
-        item.setRotation(0f);
-        item.setTranslationX(dx);
-        item.setTranslationY(dy);
-
-        Animator anim = ObjectAnimator.ofPropertyValuesHolder(
-                item,
-                AnimatorUtils.rotation(0f, 720f),
-                AnimatorUtils.translationX(dx, 0f),
-                AnimatorUtils.translationY(dy, 0f)
-        );
-
-        return anim;
-    }
-
-    private Animator createHideItemAnimator(final View item) {
-        float dx = fab.getX() - item.getX();
-        float dy = fab.getY() - item.getY();
-
-        Animator anim = ObjectAnimator.ofPropertyValuesHolder(
-                item,
-                AnimatorUtils.rotation(720f, 0f),
-                AnimatorUtils.translationX(0f, dx),
-                AnimatorUtils.translationY(0f, dy)
-        );
-
-        anim.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-                item.setTranslationX(0f);
-                item.setTranslationY(0f);
-            }
-        });
-
-        return anim;
-    }
-
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         if (grantResults[0] == 0 && grantResults[1] == 0) {
             Utility.shareImageData(YouTubeVideoActivity.this);
+            Utility.setClickCount(YouTubeVideoActivity.this, 0);
         } else {
             Utility.Notify(YouTubeVideoActivity.this, Global_App.APPNAME, "permission denied.");
         }
@@ -381,12 +314,60 @@ public class YouTubeVideoActivity extends YouTubeBaseActivity implements YouTube
     public void share() {
         if (Utility.getAppShareImage(YouTubeVideoActivity.this).trim().length() > 0) {
             if (Build.VERSION.SDK_INT >= 23) {
-                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_WRITE_PERMISSION);
+                int hasWriteContactsPermission = checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                int hasWriteContactsPermission1 = checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
+                if (hasWriteContactsPermission != PackageManager.PERMISSION_GRANTED || hasWriteContactsPermission1 != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 73);
+                } else {
+                    Utility.shareImageData(YouTubeVideoActivity.this);
+                    Utility.setClickCount(YouTubeVideoActivity.this, 0);
+                }
             } else {
                 Utility.shareImageData(YouTubeVideoActivity.this);
+                Utility.setClickCount(YouTubeVideoActivity.this, 0);
             }
         } else {
             Utility.shareImageData(YouTubeVideoActivity.this);
+            Utility.setClickCount(YouTubeVideoActivity.this, 0);
+        }
+    }
+
+    public void NotifyMessage(final Activity activity, String title) {
+        if (activity != null) {
+            final Dialog dialog1 = new Dialog(activity);
+            dialog1.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog1.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+            dialog1.setContentView(R.layout.dialogue_notify);
+            dialog1.setCancelable(false);
+            Button btnOk = (Button) dialog1.findViewById(R.id.btnSubmit);
+            TextView txtTitle = (TextView) dialog1.findViewById(R.id.txtTitle);
+            txtTitle.setText(title);
+            TextView txtMessage = (TextView) dialog1.findViewById(R.id.txtMessage);
+            txtMessage.setText(Utility.getAppMessage(activity));
+            btnOk.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (dialog1 != null) {
+                        if (!activity.isFinishing()) {
+                            dialog1.dismiss();
+                        }
+                    }
+                    share();
+
+                }
+            });
+            Display display = activity.getWindowManager().getDefaultDisplay();
+            int width = display.getWidth();
+            int hight = display.getHeight();
+            WindowManager.LayoutParams lp;
+            lp = new WindowManager.LayoutParams();
+            lp.copyFrom(dialog1.getWindow().getAttributes());
+            lp.width = (int) (width - (width * 0.07));
+            lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+            dialog1.getWindow().setAttributes(lp);
+            if (!activity.isFinishing()) {
+                dialog1.show();
+            }
         }
     }
 }
