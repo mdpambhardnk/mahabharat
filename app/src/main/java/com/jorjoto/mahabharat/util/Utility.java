@@ -379,4 +379,17 @@ public class Utility {
         return false;
     }
 
+    public static void setVideoId(Context activity, String regId) {
+        SharedPreferences pref = activity.getSharedPreferences("VideoId", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putString("VideoId", regId);
+        editor.commit();
+    }
+
+    public static String getVideoId(Context activity) {
+        SharedPreferences pref = activity.getSharedPreferences("VideoId", Context.MODE_PRIVATE);
+        String regId = pref.getString("VideoId", "");
+        return regId;
+    }
+
 }

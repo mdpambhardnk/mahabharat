@@ -133,6 +133,13 @@ public class MainActivity extends AppCompatActivity {
                 if (MainActivity.notiModel != null) {
                     ((MainActivity) activity).FromNotification(MainActivity.notiModel);
                 }
+            } else {
+                if (Utility.getVideoId(activity).trim().length() > 0) {
+                    Intent in = new Intent(activity, YouTubeVideoActivity.class);
+                    in.putExtra("videoId", Utility.getVideoId(activity).trim());
+                    Utility.setVideoId(activity, "");
+                    activity.startActivity(in);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();

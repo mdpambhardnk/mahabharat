@@ -8,6 +8,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -35,6 +36,7 @@ import com.jorjoto.mahabharat.util.Utility;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Set;
 
 public class SplashScreenActivity extends AppCompatActivity {
     public static RequestModel requestModel;
@@ -59,6 +61,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         try {
             if (getIntent().getExtras().getString("bundle") != null) {
                 Utility.setNotificationData(SplashScreenActivity.this, getIntent().getExtras().getString("bundle"));
@@ -67,6 +70,17 @@ public class SplashScreenActivity extends AppCompatActivity {
         } catch (Exception e2) {
             e2.printStackTrace();
             Utility.setFromNotification(SplashScreenActivity.this, false);
+        }
+
+        Intent in = getIntent();
+        Uri data = in.getData();
+        if (data != null) {
+            Set<String> names = data.getQueryParameterNames();
+            String referral = data.getQueryParameters(names.iterator().next()).iterator().next();
+            if (referral.trim().length()>0) {
+                Utility.setVideoId(SplashScreenActivity.this, referral);
+            }
+
         }
 
         if (Utility.checkInternetConnection(SplashScreenActivity.this)) {

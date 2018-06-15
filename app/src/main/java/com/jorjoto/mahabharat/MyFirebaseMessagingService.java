@@ -44,9 +44,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         if (remoteMessage == null)
             return;
 
-        Log.v("AAAAAAAA", "getData().size() " + remoteMessage.getData().size());
         if (remoteMessage.getData().size() > 0) {
-            Log.v("AAAAAA", "Message data payload: " + remoteMessage.getData());
             handleDataMessage(remoteMessage.getData());
         }
     }
@@ -90,7 +88,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             } else {
                 jsonObject.put("notificationID", "");
             }
-            Log.v("AAAAA", "" + jsonObject.toString());
             generateNotification(getBaseContext(), jsonObject.toString());
         } catch (Exception e) {
             e.printStackTrace();

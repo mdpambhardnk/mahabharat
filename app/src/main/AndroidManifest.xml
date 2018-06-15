@@ -58,8 +58,17 @@
             </intent-filter>
         </receiver>
 
+
         <service android:name="com.google.android.gms.analytics.CampaignTrackingService" />
 
+        <!--REfreal Link-->
+        <receiver
+            android:name=".RefererReciever"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER" />
+            </intent-filter>
+        </receiver>
         <activity
             android:name=".activity.YouTubeVideoActivity"
             android:label="@string/title_activity_main"

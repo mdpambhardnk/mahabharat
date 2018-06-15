@@ -31,11 +31,6 @@ public class MyApplication extends Application {
         return analyticsTrackers.get(AnalyticsTrackers.Target.APP);
     }
 
-    /***
-     * Tracking screen view
-     *
-     * @param screenName screen name to be displayed on GA dashboard
-     */
     public void trackScreenView(String screenName) {
         Tracker t = getGoogleAnalyticsTracker();
 
