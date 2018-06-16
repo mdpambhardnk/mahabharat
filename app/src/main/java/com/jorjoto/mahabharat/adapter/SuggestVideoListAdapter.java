@@ -83,24 +83,23 @@ public class SuggestVideoListAdapter extends RecyclerView.Adapter<SuggestVideoLi
         }
 
         if (data.get(position).getVideoLink().equals(YouTubeVideoActivity.currentVideo)) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                holder.loutMain.setBackground(activity.getResources().getDrawable(R.drawable.card_view_red));
-            }
+            holder.loutMain.setBackground(activity.getResources().getDrawable(R.drawable.card_view_red));
         } else {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                holder.loutMain.setBackground(activity.getResources().getDrawable(R.drawable.card_view));
-            }
+            holder.loutMain.setBackground(activity.getResources().getDrawable(R.drawable.card_view));
         }
         holder.loutMain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!data.get(position).getVideoLink().equals(YouTubeVideoActivity.currentVideo)) {
                     if (Utility.getClickCount(activity) >= Utility.getAppShareCount(activity)) {
-                        ((YouTubeVideoActivity)activity).NotifyMessage(activity,"Share");
+                        ((YouTubeVideoActivity) activity).NotifyMessage(activity, "Share");
                     } else {
                         Utility.setClickCount(activity, Utility.getClickCount(activity) + 1);
                         YouTubeVideoActivity.youTubePlayer.cueVideo(data.get(position).getVideoLink());
                         YouTubeVideoActivity.currentVideo = data.get(position).getVideoLink();
+                        YouTubeVideoActivity.txtTitle.setText(data.get(position).getVideoTitle());
+                        YouTubeVideoActivity.txtDescription.setText(data.get(position).getVideoDescription());
+
                         notifyDataSetChanged();
                     }
 

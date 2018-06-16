@@ -53,8 +53,8 @@ public class YouTubeVideoActivity extends YouTubeBaseActivity implements YouTube
     private static TextView txtMessage;
     private String videoId = "";
     private RecyclerView rcSuggestList;
-    private TextView txtTitle;
-    private TextView txtDescription;
+    public static TextView txtTitle;
+    public static TextView txtDescription;
     public static String currentVideo = "";
     static ResponseModel responseModel;
     SuggestVideoListAdapter suggestVideoListAdapter;

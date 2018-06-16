@@ -173,7 +173,6 @@ public class SplashScreenActivity extends AppCompatActivity {
         requestModel.setDevice_id(Settings.Secure.getString(activity.getContentResolver(), Settings.Secure.ANDROID_ID));
         requestModel.setDevice_version(Build.VERSION.RELEASE);
         requestModel.setDevice_name(Build.MODEL);
-        Log.v("AAAAAAA", "=> " + Utility.getFCMRegId(activity));
         requestModel.setDevice_token(Utility.getFCMRegId(activity));
         PackageInfo pInfo = null;
         try {
