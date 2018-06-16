@@ -62,6 +62,23 @@ public class SuggestVideoListAdapter extends RecyclerView.Adapter<SuggestVideoLi
                     if (holder.probr != null && holder.imgBanner != null) {
                         holder.probr.setVisibility(View.GONE);
                     }
+                    if (holder.imgBanner != null) {
+                        Picasso.with(activity).load("https://i1.ytimg.com/vi/G0wGs3useV8/0.jpg").into(holder.imgBanner, new Callback() {
+                            public void onSuccess() {
+                                if (holder.probr != null) {
+                                    holder.probr.setVisibility(View.GONE);
+                                }
+                            }
+
+                            public void onError() {
+                                if (holder.probr != null) {
+                                    holder.probr.setVisibility(View.GONE);
+                                }
+
+                            }
+                        });
+                    }
+
 
                 }
             });
