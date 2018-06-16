@@ -84,18 +84,6 @@ public class SplashScreenActivity extends AppCompatActivity {
         }
 
         if (Utility.checkInternetConnection(SplashScreenActivity.this)) {
-            String currentDateTimeString = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
-            if ((Utility.getTodayDate(SplashScreenActivity.this).equals(currentDateTimeString))) {
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    public void run() {
-                        Intent in = new Intent(SplashScreenActivity.this, MainActivity.class);
-                        startActivity(in);
-                        finish();
-                    }
-                }, 3900);
-            } else {
-                Utility.setTodayDate(SplashScreenActivity.this, currentDateTimeString);
                 if (Utility.getFCMRegId(SplashScreenActivity.this).trim().length() > 0) {
                     getFCMData(SplashScreenActivity.this);
                 } else {
@@ -110,7 +98,7 @@ public class SplashScreenActivity extends AppCompatActivity {
                         getFCMData(this);
                     }
                 }
-            }
+
         } else {
             NotifyAndRetry(SplashScreenActivity.this, Global_App.APPNAME, Global_App.msgINTERNET);
         }
