@@ -11,7 +11,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.preference.PreferenceManager;
-import android.support.v4.content.FileProvider;
 import android.view.Display;
 import android.view.View;
 import android.view.Window;
@@ -20,16 +19,16 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.jorjoto.mahabharat.R;
-import com.jorjoto.mahabharat.activity.MainActivity;
 import com.jorjoto.mahabharat.async.DownloadImageShareAsync;
 import com.jorjoto.mahabharat.model.CategoryModel;
 
 import org.json.JSONObject;
 
 import java.io.File;
-import java.net.URLConnection;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import static android.support.v4.content.FileProvider.getUriForFile;
 
 public class Utility {
     private static CategoryModel notificationModel;
@@ -319,22 +318,20 @@ public class Utility {
             String[] str = getAppShareImage(activity).trim().split("/");
             File file = new File(dir, str[str.length - 1] + ".png");
             if (file.exists()) {
+
                 try {
-                    share = new Intent(Intent.ACTION_SEND);
                     Uri uri = Uri.fromFile(file);
-                    share.setType("image/*");
-                    share.putExtra(Intent.EXTRA_STREAM, uri);
-//                    if (Build.VERSION.SDK_INT >= 24) {
-//                    intent1.setDataAndType(uri, URLConnection.guessContentTypeFromName(uri.toString()));
-//                        share.setDataAndType(FileProvider.getUriForFile(activity.getApplicationContext(), "com.jorjoto.mahabharat", file), "image/jpg");
-//                    } else {
-//                        share.setType("image/*");
-//                        share.putExtra(Intent.EXTRA_STREAM, uri);
-//                    }
+                    share = new Intent(Intent.ACTION_SEND);
                     share.putExtra(Intent.EXTRA_SUBJECT, Global_App.APPNAME);
                     share.putExtra(Intent.EXTRA_TEXT, getAppShareMessage(activity));
+                    if (Build.VERSION.SDK_INT >= 24) {
+                        Uri contentUri = getUriForFile(activity, activity.getPackageName(), file);
+                        share.putExtra(Intent.EXTRA_STREAM, contentUri);
+                    } else {
+                        share.putExtra(Intent.EXTRA_STREAM, uri);
+                    }
+                    share.setType("image/*");
                     activity.startActivity(Intent.createChooser(share, "Share"));
-
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
