@@ -318,7 +318,6 @@ public class Utility {
             String[] str = getAppShareImage(activity).trim().split("/");
             File file = new File(dir, str[str.length - 1] + ".png");
             if (file.exists()) {
-
                 try {
                     Uri uri = Uri.fromFile(file);
                     share = new Intent(Intent.ACTION_SEND);
