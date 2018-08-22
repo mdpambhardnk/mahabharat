@@ -88,7 +88,7 @@
         <activity
             android:name=".activity.YouTubeVideoActivity"
             android:label="@string/title_activity_main"
-            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|locale"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.MainActivity"

@@ -13,7 +13,9 @@ import android.widget.TextView;
 
 import com.jorjoto.mahabharat.R;
 import com.jorjoto.mahabharat.activity.YouTubeVideoActivity;
+import com.jorjoto.mahabharat.async.GetAdAsync;
 import com.jorjoto.mahabharat.model.CategoryModel;
+import com.jorjoto.mahabharat.model.RequestModel;
 import com.jorjoto.mahabharat.util.Utility;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -111,12 +113,16 @@ public class SuggestVideoListAdapter extends RecyclerView.Adapter<SuggestVideoLi
                     if (Utility.getClickCount(activity) >= Utility.getAppShareCount(activity)) {
                         ((YouTubeVideoActivity) activity).NotifyMessage(activity, "Share");
                     } else {
+
+                        RequestModel  requestModel = new RequestModel();
+                        requestModel.setAd_type("2");
+                        new GetAdAsync(activity,requestModel);
                         Utility.setClickCount(activity, Utility.getClickCount(activity) + 1);
                         YouTubeVideoActivity.youTubePlayer.cueVideo(data.get(position).getVideoLink());
                         YouTubeVideoActivity.currentVideo = data.get(position).getVideoLink();
                         YouTubeVideoActivity.txtTitle.setText(data.get(position).getVideoTitle());
                         YouTubeVideoActivity.txtDescription.setText(data.get(position).getVideoDescription());
-
+                        YouTubeVideoActivity.tooltext.setText(data.get(position).getVideoTitle());
                         notifyDataSetChanged();
                     }
 

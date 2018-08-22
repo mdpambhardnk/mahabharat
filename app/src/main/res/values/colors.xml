@@ -21,4 +21,7 @@
     <color name="edt_divider">#D2D2D2</color>
     <color name="textColorPrimary">#757584</color>
     <color name="textColorPrimaryDark">#A5A5A5</color>
+    <color name="gray">#ADB0B2</color>
+    <color name="advertise">#252F35</color>
+
 </resources>

@@ -96,13 +96,12 @@ public class HomeVideoListAdapter extends RecyclerView.Adapter<HomeVideoListAdap
             public void onClick(View v) {
                 Intent in = new Intent(activity, YouTubeVideoActivity.class);
                 in.putExtra("videoId", data.get(position).getVideoId());
+                in.putExtra("videotitle", data.get(position).getVideoTitle());
                 activity.startActivity(in);
 
             }
         });
-
-
-        if (position == getItemCount() - 1) {
+       /* if (position == getItemCount() - 1) {
             if (MainActivity.totalRecord <= getItemCount()) {
                 holder.loder.setVisibility(View.GONE);
             } else {
@@ -116,7 +115,7 @@ public class HomeVideoListAdapter extends RecyclerView.Adapter<HomeVideoListAdap
             }
         } else {
             holder.loder.setVisibility(View.GONE);
-        }
+        }*/
     }
 
     @Override

@@ -3,8 +3,8 @@ package com.jorjoto.mahabharat.model;
 import java.util.ArrayList;
 
 public class ResponseModel {
-    String status, message,totalItems,totalPages,currentPage,appShareCount;
-    ArrayList<CategoryModel> mainData,relatedVideos,SuggestedApps;
+    String status, message,totalItems,totalPages,currentPage,appShareCount,showAdd;
+    ArrayList<CategoryModel> mainData,relatedVideos,SuggestedApps,view_ad,adsData;
     CategoryModel videoData,appShare;
 
     public ArrayList<CategoryModel> getSuggestedApps() {
@@ -93,5 +93,29 @@ public class ResponseModel {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public String getShowAdd() {
+        return showAdd;
+    }
+
+    public void setShowAdd(String showAdd) {
+        this.showAdd = showAdd;
+    }
+
+    public ArrayList<CategoryModel> getView_ad() {
+        return view_ad;
+    }
+
+    public void setView_ad(ArrayList<CategoryModel> view_ad) {
+        this.view_ad = view_ad;
+    }
+
+    public ArrayList<CategoryModel> getAdsData() {
+        return adsData;
+    }
+
+    public void setAdsData(ArrayList<CategoryModel> adsData) {
+        this.adsData = adsData;
     }
 }

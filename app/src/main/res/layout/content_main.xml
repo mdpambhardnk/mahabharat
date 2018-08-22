@@ -58,6 +58,17 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/bannerad"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="8dp"
+                android:layout_marginHorizontal="7dp"
+                android:background="@drawable/card_view"
+                android:orientation="horizontal"></LinearLayout>
+
+
+            <LinearLayout
                 android:id="@+id/loutVideo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -28,4 +28,15 @@ public interface ApiInterface {
     @POST("mahabharat_api.php")
     Call<ResponseModel> getVideodetail(@Field("method") String method,
                                      @Field("video_id") String device_id);
+
+    @FormUrlEncoded
+    @POST("mahabharat_api.php")
+    Call<ResponseModel> GetAd(@Field("method") String method,
+                              @Field("ad_type") String ad_type);
+
+    @FormUrlEncoded
+    @POST("mahabharat_api.php")
+    Call<ResponseModel> Insertadclick(@Field("method") String method,
+                                      @Field("ad_id") String ad_id,
+                                      @Field("device_id") String device_id);
 }

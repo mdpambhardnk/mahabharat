@@ -1,28 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:background="@color/white"
     android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/loutMain"
-        android:layout_width="150dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="7dp"
         android:layout_marginTop="5dp"
-        android:background="@drawable/card_view"
+        android:background="@color/white"
+        android:gravity="center_horizontal"
         android:orientation="vertical">
 
-        <RelativeLayout
-            android:layout_width="150dp"
+        <LinearLayout
+            android:id="@+id/loutIcon"
+            android:layout_width="110dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical">
+            android:orientation="vertical"
+            android:padding="5dp"
+            android:visibility="visible">
 
             <ProgressBar
                 android:id="@+id/probr"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_centerInParent="true"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="10dp" />
+
+            <ImageView
+                android:id="@+id/imgIcon"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true" />
+
+            <TextView
+                android:id="@+id/txtTitle"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
+                android:gravity="center_vertical"
+                android:maxLines="2"
+                android:text=""
+                android:textColor="@color/black"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/loutBanner"
+            android:layout_width="240dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="5dp"
+            android:visibility="visible">
+
+            <ProgressBar
+                android:id="@+id/probrBanner"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center_horizontal"
                 android:layout_margin="10dp" />
 
             <ImageView
@@ -30,16 +76,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true" />
-        </RelativeLayout>
+        </LinearLayout>
 
-        <TextView
-            android:id="@+id/txtTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:maxLines="2"
-            android:textColor="@color/title"
-            android:textSize="14sp" />
 
     </LinearLayout>
 </LinearLayout>
+

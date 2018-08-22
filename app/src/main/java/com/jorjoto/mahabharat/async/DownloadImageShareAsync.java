@@ -14,6 +14,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import android.app.ProgressDialog;
+import android.os.Build;
+import android.support.v4.content.FileProvider;
+
 public class DownloadImageShareAsync extends AsyncTask<String, Void, Bitmap> {
     private final Activity activity;
     private final File file;
@@ -67,13 +70,13 @@ public class DownloadImageShareAsync extends AsyncTask<String, Void, Bitmap> {
             Uri uri = Uri.fromFile(file);
             share.putExtra(Intent.EXTRA_SUBJECT, Global_App.APPNAME);
             share.setType("image/*");
-            share.putExtra(Intent.EXTRA_STREAM, uri);
-//            if (Build.VERSION.SDK_INT >= 24) {
-//                share.setDataAndType(FileProvider.getUriForFile(activity.getApplicationContext(), "com.jorjoto.mahabharat", file), "image/jpg");
-//            } else {
-//                share.setType("image/*");
-//                share.putExtra(Intent.EXTRA_STREAM, uri);
-//            }
+           // share.putExtra(Intent.EXTRA_STREAM, uri);
+            if (Build.VERSION.SDK_INT >= 24) {
+                share.setDataAndType(FileProvider.getUriForFile(activity.getApplicationContext(), "com.jorjoto.mahabharat", file), "image/jpg");
+            } else {
+                share.setType("image/*");
+                share.putExtra(Intent.EXTRA_STREAM, uri);
+            }
             share.putExtra(Intent.EXTRA_SUBJECT, "");
             share.putExtra(Intent.EXTRA_TEXT, Utility.getAppShareMessage(activity));
 

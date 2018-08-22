@@ -5,33 +5,58 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
+import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.Display;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import com.jorjoto.mahabharat.R;
 import com.jorjoto.mahabharat.async.DownloadImageShareAsync;
+import com.jorjoto.mahabharat.database.DataBaseClass;
 import com.jorjoto.mahabharat.model.CategoryModel;
+import com.jorjoto.mahabharat.model.ResponseModel;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
+import org.xml.sax.helpers.LocatorImpl;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static android.support.v4.content.FileProvider.getUriForFile;
 
 public class Utility {
     private static CategoryModel notificationModel;
+    private static boolean finish = false;
+    private static DataBaseClass db;
 
     public static void setFCMRegId(Context activity, String regId) {
         SharedPreferences pref = activity.getSharedPreferences("DEVICETOKEN", Context.MODE_PRIVATE);
@@ -388,4 +413,267 @@ public class Utility {
         return regId;
     }
 
+
+    public static void setshowadd(Context activity, String flag) {
+        SharedPreferences pref = activity.getSharedPreferences("showadd", 0);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putString("showadd", flag);
+        editor.commit();
+    }
+
+
+    public static String getshowadd(Context activity) {
+        SharedPreferences pref = activity.getSharedPreferences("showadd", 0);
+        String showadd = pref.getString("showadd", "");
+        return showadd;
+    }
+
+    public static void adclick(final Activity activity, String ad_id) {
+        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+        String device_id = Settings.Secure.getString(activity.getContentResolver(), Settings.Secure.ANDROID_ID);
+        Call<ResponseModel> call = apiService.Insertadclick("ad_click", ad_id, device_id);
+        call.enqueue(new Callback<ResponseModel>() {
+            @Override
+            public void onResponse(Call<ResponseModel> call, Response<ResponseModel> response) {
+            }
+
+            @Override
+            public void onFailure(Call<ResponseModel> call, Throwable t) {
+            }
+        });
+    }
+
+    public static void advertisement(Activity activity, ResponseModel responseModel) {
+        if (responseModel != null) {
+            ArrayList<CategoryModel> list = new ArrayList<>();
+            list.addAll(responseModel.getView_ad());
+            for (int i = 0; i < list.size(); i++) {
+                if (list.get(i).getAd_type().equals("Full Page")) {
+                    fulladvertise(activity, list, i);
+                } else if (list.get(i).getAd_type().equals("Native")) {
+                    nativead(activity, responseModel, i);
+                } else if (list.get(i).getAd_type().equals("Banner")) {
+                    bannerad(activity, responseModel, i);
+                }
+            }
+        }
+    }
+
+    public static void nativead(final Activity activity, ResponseModel responseModel, int position) {
+        //LinearLayout linearLayout = (LinearLayout) activity.findViewById(R.id.nativead);
+        //linearLayout.removeAllViews();
+        ArrayList<CategoryModel> list = new ArrayList<>();
+        list.addAll(responseModel.getView_ad());
+        View view = LayoutInflater.from(activity).inflate(R.layout.row_native_advertise, null);
+
+        ImageView imglogo = (ImageView) view.findViewById(R.id.imglogo);
+        ImageView adimage = (ImageView) view.findViewById(R.id.adimage);
+        TextView texttitle = (TextView) view.findViewById(R.id.texttitle);
+        TextView textdescription = (TextView) view.findViewById(R.id.textdescription);
+        Button btninstall = (Button) view.findViewById(R.id.btninstall);
+        final CategoryModel model = list.get(position);
+
+        btninstall.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Utility.adclick(activity, model.getAd_id());
+                String market_uri = model.getRedirect_url();
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse(market_uri));
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent
+                        .FLAG_ACTIVITY_NO_ANIMATION);
+                activity.startActivity(intent);
+            }
+        });
+        if (model.getApplication_name() != null) {
+            texttitle.setText(model.getApplication_name());
+        }
+
+        if (model.getDescription() != null) {
+            textdescription.setText(model.getDescription());
+        }
+        adimage.setVisibility(View.VISIBLE);
+        Picasso.with(activity)
+                .load(model.getSource_path())
+                .into(adimage);
+
+        btninstall.setText(model.getButton_title());
+        Picasso.with(activity)
+                .load(model.getApplication_logo())
+                .into(imglogo);
+
+        btninstall.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Utility.adclick(activity, model.getAd_id());
+                String market_uri = model.getRedirect_url();
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse(market_uri));
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent
+                        .FLAG_ACTIVITY_NO_ANIMATION);
+                activity.startActivity(intent);
+            }
+        });
+        // linearLayout.addView(view);
+    }
+
+    public static void bannerad(final Activity activity, ResponseModel responseModel, int position) {
+        db = new DataBaseClass(activity);
+        LinearLayout linearLayout = (LinearLayout) activity.findViewById(R.id.bannerad);
+        linearLayout.removeAllViews();
+        ArrayList<CategoryModel> list = new ArrayList<>();
+        list.addAll(responseModel.getView_ad());
+        View view = LayoutInflater.from(activity).inflate(R.layout.row_banner_advertisement, null);
+        ImageView imglogo = (ImageView) view.findViewById(R.id.imglogo);
+        ImageView imgclose = (ImageView) view.findViewById(R.id.imgclose);
+        TextView texttitle = (TextView) view.findViewById(R.id.texttitle);
+        Button btninstall = (Button) view.findViewById(R.id.btninstall);
+        final RelativeLayout relativebanner = (RelativeLayout) view.findViewById(R.id.relativebanner);
+        final CategoryModel model = list.get(position);
+        relativebanner.setVisibility(View.VISIBLE);
+        imgclose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Date c = Calendar.getInstance().getTime();
+                SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+                String todaydate = df.format(c);
+                SharedPreferences date = activity.getSharedPreferences("todaydate", activity.MODE_PRIVATE);
+                SharedPreferences.Editor dateeditor = date.edit();
+                dateeditor.putString("date", todaydate);
+                dateeditor.commit();
+                String storedate = date.getString("date", null);
+                if (!storedate.equals(todaydate)) {
+                    db.deletecloseadsData();
+                    dateeditor.putString("date", todaydate);
+                    dateeditor.commit();
+                    db.insertcloseadsData(model.getAd_id(), model.getAd_type());
+                    relativebanner.setVisibility(View.GONE);
+                } else {
+                    db.insertcloseadsData(model.getAd_id(), model.getAd_type());
+                    relativebanner.setVisibility(View.GONE);
+                }
+            }
+        });
+        if (model.getApplication_name() != null) {
+            texttitle.setText(model.getApplication_name());
+        }
+        Picasso.with(activity)
+                .load(model.getApplication_logo())
+                .into(imglogo);
+        btninstall.setText(model.getButton_title());
+        btninstall.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Utility.adclick(activity, model.getAd_id());
+                String market_uri = model.getRedirect_url();
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse(market_uri));
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent
+                        .FLAG_ACTIVITY_NO_ANIMATION);
+                activity.startActivity(intent);
+            }
+        });
+        final Cursor cursor = db.iscloseadsadded(model.getAd_id());
+        if (cursor.getCount() != 0) {
+            relativebanner.setVisibility(View.GONE);
+        }
+        linearLayout.addView(view);
+    }
+
+    public static void fulladvertise(final Activity activity, ArrayList<CategoryModel> list, int position) {
+        final Dialog dialog;
+        dialog = new Dialog(activity);
+        dialog.setContentView(R.layout.row_full_advertisement);
+        ImageView imgclose = (ImageView) dialog.findViewById(R.id.imgclose);
+        ImageView imgad = (ImageView) dialog.findViewById(R.id.imgad);
+        RatingBar imgratting = (RatingBar) dialog.findViewById(R.id.imgratting);
+        ImageView imgmain = (ImageView) dialog.findViewById(R.id.imgmain);
+        ImageView imgdrawable = (ImageView) dialog.findViewById(R.id.imgdrawable);
+        ImageView imginfo = (ImageView) dialog.findViewById(R.id.imginfo);
+        LinearLayout adbtninstall = (LinearLayout) dialog.findViewById(R.id.adbtninstall);
+        TextView adtextsubtitle = (TextView) dialog.findViewById(R.id.adtextsubtitle);
+        TextView adtextsubdescription = (TextView) dialog.findViewById(R.id.adtextsubdescription);
+        TextView textbtn = (TextView) dialog.findViewById(R.id.textbtn);
+        TextView adtexttitle = (TextView) dialog.findViewById(R.id.adtexttitle);
+        RelativeLayout relativefull = (RelativeLayout) dialog.findViewById(R.id.relativefull);
+
+        final TextView textpoweredby = (TextView) dialog.findViewById(R.id.textpoweredby);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        final CategoryModel model = list.get(position);
+        adtextsubdescription.setMovementMethod(new ScrollingMovementMethod());
+        imgclose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
+            }
+        });
+        if (model.getApplication_name() != null) {
+            adtexttitle.setText(model.getApplication_name());
+        }
+        if (model.getRate() != null) {
+            imgratting.setRating(Float.parseFloat(model.getRate()));
+        }
+        if (model.getApplication_caption() != null) {
+            adtextsubtitle.setText(model.getApplication_caption());
+        }
+        if (model.getDescription() != null) {
+            adtextsubdescription.setText(model.getDescription());
+        }
+        imginfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (model.getPowered_by() != null) {
+                    textpoweredby.setVisibility(View.VISIBLE);
+                    textpoweredby.setText("Powered by : " + model.getPowered_by());
+                }
+            }
+        });
+
+        imgmain.setVisibility(View.VISIBLE);
+        Picasso.with(activity)
+                .load(model.getSource_path())
+                .into(imgmain);
+
+        textbtn.setText(model.getButton_title());
+        Picasso.with(activity)
+                .load(model.getButton_icon_path())
+                .into(imgdrawable);
+
+        Picasso.with(activity)
+                .load(model.getApplication_logo())
+                .into(imgad);
+
+        adbtninstall.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                adclick(activity, model.getAd_id());
+                String market_uri = model.getRedirect_url();
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse(market_uri));
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent
+                        .FLAG_ACTIVITY_NO_ANIMATION);
+                activity.startActivity(intent);
+
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
+            }
+        });
+
+        Display display = activity.getWindowManager().getDefaultDisplay();
+        int width = display.getWidth();
+        int hight = display.getHeight();
+        WindowManager.LayoutParams lp;
+        lp = new WindowManager.LayoutParams();
+        lp.copyFrom(dialog.getWindow().getAttributes());
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        dialog.setCancelable(false);
+        dialog.getWindow().setAttributes(lp);
+        if (!activity.isFinishing()) {
+            dialog.show();
+        }
+    }
 }

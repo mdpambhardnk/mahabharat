@@ -8,11 +8,33 @@
     tools:context=".activity.MainActivity"
     tools:showIn="@layout/activity_main2">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rcList"
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/nestedscroll"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/bg" />
+        android:layout_above="@id/bannerad"
+        android:layout_height="wrap_content">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/inflate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"></LinearLayout>
+
+            <ProgressBar
+                android:id="@+id/probrpage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:visibility="gone" />
+
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
 
     <ProgressBar
         android:id="@+id/probr"
@@ -28,4 +50,12 @@
         android:textColor="@color/black"
         android:textSize="16sp"
         android:visibility="gone" />
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:id="@+id/bannerad"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"></LinearLayout>
 </RelativeLayout>

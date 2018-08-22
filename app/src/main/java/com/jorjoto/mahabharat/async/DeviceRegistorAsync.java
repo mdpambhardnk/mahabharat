@@ -68,6 +68,9 @@ public class DeviceRegistorAsync {
                 if (responseModel.getAppShareCount() != null && !responseModel.getAppShareCount().equals("")) {
                     Utility.setAppShareCount(activity, Integer.parseInt(responseModel.getAppShareCount()));
                 }
+                if (responseModel.getShowAdd() != null && responseModel.getShowAdd().trim().length() > 0) {
+                    Utility.setshowadd(activity, responseModel.getShowAdd().trim());
+                }
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     public void run() {

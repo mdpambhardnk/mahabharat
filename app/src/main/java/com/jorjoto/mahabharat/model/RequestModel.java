@@ -1,7 +1,7 @@
 package com.jorjoto.mahabharat.model;
 
 public class RequestModel {
-    String device_id,device_name,device_token,device_version,app_version,page,video_id;
+    String device_id,device_name,device_token,device_version,app_version,page,video_id,ad_type,ad_id;
 
     public String getDevice_id() {
         return device_id;
@@ -57,5 +57,21 @@ public class RequestModel {
 
     public void setVideo_id(String video_id) {
         this.video_id = video_id;
+    }
+
+    public String getAd_type() {
+        return ad_type;
+    }
+
+    public void setAd_type(String ad_type) {
+        this.ad_type = ad_type;
+    }
+
+    public String getAd_id() {
+        return ad_id;
+    }
+
+    public void setAd_id(String ad_id) {
+        this.ad_id = ad_id;
     }
 }

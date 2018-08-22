@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:id="@+id/relativebanner">
+
+    <RelativeLayout
+        android:padding="4dp"
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/imglogo"
+            android:layout_centerVertical="true"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/icon_applogo_notification" />
+
+        <TextView
+            android:id="@+id/texttitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="3dp"
+            android:layout_toRightOf="@+id/imglogo"
+            android:layout_toLeftOf="@+id/btninstall"
+            android:maxLines="2"
+            android:text="Create Your Name"
+            android:textColor="@color/black"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btninstall"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:background="@drawable/btn_round_red"
+            android:text="install"
+            android:layout_toLeftOf="@+id/imgclose"
+            android:layout_marginRight="2dp"
+            android:layout_marginVertical="5dp"
+            android:textColor="@color/white" />
+
+        <ImageView
+            android:paddingTop="0dp"
+            android:paddingRight="0dp"
+            android:id="@+id/imgclose"
+            android:tint="@color/black"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:alpha="0.5"
+            android:src="@drawable/close"/>
+    </RelativeLayout>
+
+</RelativeLayout>

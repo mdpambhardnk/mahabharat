@@ -23,6 +23,9 @@
 -keepclassmembers class * {
     @android.webkit.JavascriptInterface <methods>;
 }
+
+#-libraryjars D:/Android/sdkapi23/sdkapi23/platforms/android-21/android.jar
+#-libraryjars D:/Android/sdkapi23/sdkapi23/tools/lib/gson-2.3.jar
 -libraryjars D:/sdk/platforms/android-21/android.jar
 -libraryjars D:/sdk/tools/lib/gson-2.3.jar
 -dontwarn org.xmlpull.v1.**

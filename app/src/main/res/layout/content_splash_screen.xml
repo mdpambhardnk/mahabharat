@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/lin_lay"
-    android:background="@drawable/splesh"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".activity.SplashScreenActivity"
-    tools:showIn="@layout/activity_splash_screen">
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:id="@+id/lin_lay"
+android:background="@drawable/splesh"
+app:layout_behavior="@string/appbar_scrolling_view_behavior"
+tools:context=".activity.SplashScreenActivity"
+tools:showIn="@layout/activity_splash_screen">
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/imageView2"
-        android:background="@drawable/splesh_logo" />
+<ImageView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/imageView2"
+    android:background="@drawable/splesh_logo" />
 
 </RelativeLayout>

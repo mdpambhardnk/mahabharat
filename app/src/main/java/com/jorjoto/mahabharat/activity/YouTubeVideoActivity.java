@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -30,6 +31,7 @@ import com.jorjoto.mahabharat.MyApplication;
 import com.jorjoto.mahabharat.R;
 import com.jorjoto.mahabharat.adapter.SuggestAppListAdapter;
 import com.jorjoto.mahabharat.adapter.SuggestVideoListAdapter;
+import com.jorjoto.mahabharat.async.GetAdAsync;
 import com.jorjoto.mahabharat.async.GetVideoDetailsAsync;
 import com.jorjoto.mahabharat.model.CategoryModel;
 import com.jorjoto.mahabharat.model.RequestModel;
@@ -39,6 +41,8 @@ import com.jorjoto.mahabharat.util.Utility;
 import com.sa90.materialarcmenu.ArcMenu;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class YouTubeVideoActivity extends YouTubeBaseActivity implements YouTubePlayer.OnInitializedListener {
     Toast toast = null;
@@ -51,7 +55,7 @@ public class YouTubeVideoActivity extends YouTubeBaseActivity implements YouTube
     private static LinearLayout loutMian;
     private static ProgressBar prpobr;
     private static TextView txtMessage;
-    private String videoId = "";
+    private String videoId = "",videotitle  = " ";
     private RecyclerView rcSuggestList;
     public static TextView txtTitle;
     public static TextView txtDescription;
@@ -64,6 +68,9 @@ public class YouTubeVideoActivity extends YouTubeBaseActivity implements YouTube
     SuggestAppListAdapter suggestAppListAdapter;
     private ArcMenu arcMenu;
     ArrayList<CategoryModel> appList;
+    private RequestModel requestModel = new RequestModel();
+    ImageView imgback;
+    public static  TextView tooltext;
 
 
     @Override
@@ -72,10 +79,25 @@ public class YouTubeVideoActivity extends YouTubeBaseActivity implements YouTube
         setContentView(R.layout.activity_main);
         Intent intent = getIntent();
         videoId = intent.getStringExtra("videoId");
+        videotitle = intent.getStringExtra("videotitle");
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = YouTubeVideoActivity.this.getWindow();
             window.setStatusBarColor(getResources().getColor(R.color.black));
         }
+
+        final Timer t = new Timer();
+        t.schedule(new TimerTask() {
+            public void run() {
+                requestModel.setAd_type("1");
+                new GetAdAsync(YouTubeVideoActivity.this, requestModel);
+                t.cancel(); // also just top the timer thread, otherwise, you may receive a crash report
+            }
+        }, 15 * 1000);
+
+        requestModel.setAd_type("2");
+        new GetAdAsync(YouTubeVideoActivity.this, requestModel);
+
         youTubeView = (YouTubePlayerView) findViewById(R.id.youtube_view);
         youTubeView.initialize(Global_App.YOUTUBE_API_KEY, this);
         prpobr = (ProgressBar) findViewById(R.id.prpobr);
@@ -86,6 +108,16 @@ public class YouTubeVideoActivity extends YouTubeBaseActivity implements YouTube
         rcApps = (RecyclerView) findViewById(R.id.rcApps);
         txtTitle = (TextView) findViewById(R.id.txtTitle);
         txtDescription = (TextView) findViewById(R.id.txtDescription);
+        tooltext = (TextView) findViewById(R.id.tooltext);
+        imgback = (ImageView) findViewById(R.id.imgback);
+
+        imgback.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+        tooltext.setText(videotitle);
 
         arcMenu = (ArcMenu) findViewById(R.id.arcMenu);
         arcMenu.setRadius(getResources().getDimension(R.dimen.radius));
@@ -193,7 +225,7 @@ public class YouTubeVideoActivity extends YouTubeBaseActivity implements YouTube
     public void onInitializationSuccess(Provider provider, YouTubePlayer player, boolean wasRestored) {
         if (!wasRestored) {
             youTubePlayer = player;
-            player.setFullscreenControlFlags(YouTubePlayer.FULLSCREEN_FLAG_CUSTOM_LAYOUT);
+            // player.setFullscreenControlFlags(YouTubePlayer.FULLSCREEN_FLAG_CUSTOM_LAYOUT);
 //            YouTubePlayer.PlayerStyle style = YouTubePlayer.PlayerStyle.MINIMAL;
 //            player.setPlayerStyle(style   );
             youTubePlayer.setOnFullscreenListener(new YouTubePlayer.OnFullscreenListener() {
@@ -205,6 +237,13 @@ public class YouTubeVideoActivity extends YouTubeBaseActivity implements YouTube
             });
             getVideoList(YouTubeVideoActivity.this, videoId);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        requestModel.setAd_type("2");
+        new GetAdAsync(YouTubeVideoActivity.this, requestModel);
     }
 
     public static void getVideoList(Activity activity, String id) {
@@ -309,6 +348,7 @@ public class YouTubeVideoActivity extends YouTubeBaseActivity implements YouTube
     public void onBackPressed() {
         if (fullScreen) {
             youTubePlayer.setFullscreen(false);
+
         } else {
             super.onBackPressed();
         }

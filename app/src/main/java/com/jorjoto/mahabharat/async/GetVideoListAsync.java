@@ -21,14 +21,12 @@ import retrofit2.Response;
 public class GetVideoListAsync {
     private Activity activity;
     private RequestModel requestModel;
-    private JSONObject jObject;
 
     public GetVideoListAsync(final Activity activity, RequestModel requestModel) {
         this.activity = activity;
         this.requestModel = requestModel;
 
         try {
-            jObject = new JSONObject();
             ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
             Call<ResponseModel> call = apiService.getVideoList("get_video_list", requestModel.getPage());
             call.enqueue(new Callback<ResponseModel>() {
@@ -36,7 +34,6 @@ public class GetVideoListAsync {
                 public void onResponse(Call<ResponseModel> call, Response<ResponseModel> response) {
                     if (response != null) {
                         onPostExecute(response.body());
-                        Log.v("AAAAAA", "" + response.body());
                     } else {
                         Utility.NotifyFinish(activity, Global_App.APPNAME, Global_App.msg_Service_Error);
                     }
